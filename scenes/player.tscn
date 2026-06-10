@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://ce43i43edb0sb"]
+
+[ext_resource type="Script" uid="uid://c53iq3h2l6dk4" path="res://scripts/player.gd" id="1_m25sn"]
+[ext_resource type="Texture2D" uid="uid://diui6pbrqxqwn" path="res://assets/textures/topdown_character.png" id="2_50538"]
+[ext_resource type="Texture2D" uid="uid://co0ntrptm718s" path="res://assets/textures/gun.png" id="3_c4j7g"]
+[ext_resource type="AudioStream" uid="uid://dbmysgdqfvpa" path="res://assets/audio/gun_shot.wav" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://dh2j84v6scf1o" path="res://assets/audio/player_death.wav" id="5_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://qm4mcj07m1ad" path="res://assets/audio/player_hurt.wav" id="5_tuyoq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jtrmv"]
+radius = 24.0
+height = 80.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f4so4"]
+radius = 20.0
+height = 70.0
+
+[sub_resource type="Animation" id="Animation_13ksw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserLine2D:width")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+
+[sub_resource type="Animation" id="Animation_player_take_damage"]
+resource_name = "take_damage"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_mmcis"]
+resource_name = "turn_laser_on"
+length = 0.2
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LaserLine2D:width")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 6.0, 2.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r4ipt"]
+_data = {
+&"RESET": SubResource("Animation_13ksw"),
+&"take_damage": SubResource("Animation_player_take_damage"),
+&"turn_laser_on": SubResource("Animation_mmcis")
+}
+
+[node name="Player" type="CharacterBody2D" unique_id=320983378]
+collision_layer = 2
+collision_mask = 17
+script = ExtResource("1_m25sn")
+
+[node name="LaserLine2D" type="Line2D" parent="." unique_id=1148121152]
+points = PackedVector2Array(60, 0, 2000, 0)
+width = 2.0
+default_color = Color(1, 0, 0, 0.588235)
+
+[node name="Body" type="Sprite2D" parent="." unique_id=1059682772]
+scale = Vector2(3, 3)
+texture = ExtResource("2_50538")
+
+[node name="Gun" type="Sprite2D" parent="Body" unique_id=29093978]
+position = Vector2(14.6667, 0)
+texture = ExtResource("3_c4j7g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1838266077]
+position = Vector2(-9, 0)
+shape = SubResource("CapsuleShape2D_jtrmv")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1510382616]
+process_callback = 0
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="HitBox" type="Area2D" parent="." unique_id=756380791]
+collision_layer = 4
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=951859743]
+position = Vector2(-9, 0)
+shape = SubResource("CapsuleShape2D_f4so4")
+
+[node name="CameraRemoteTransform" type="RemoteTransform2D" parent="." unique_id=76642463]
+
+[node name="ShootRaycast" type="RayCast2D" parent="." unique_id=892257936]
+visible = false
+position = Vector2(65, 0)
+target_position = Vector2(1000, 0)
+collision_mask = 9
+collide_with_areas = true
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="." unique_id=1912823624]
+stream = ExtResource("4_dqkch")
+volume_db = 12.0
+max_polyphony = 10
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="." unique_id=1507046212]
+stream = ExtResource("5_tuyoq")
+volume_db = 12.0
+max_polyphony = 10
+
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="." unique_id=1507046211]
+stream = ExtResource("5_qlg0r")
+volume_db = 12.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=808341162]
+libraries/ = SubResource("AnimationLibrary_r4ipt")
+
+[connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]
+[connection signal="body_exited" from="HitBox" to="." method="_on_hit_box_body_exited"]

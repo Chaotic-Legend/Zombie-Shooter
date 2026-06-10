@@ -1,0 +1,167 @@
+[gd_scene format=3 uid="uid://cuxar6dinyt1p"]
+
+[ext_resource type="Script" uid="uid://defber58mt5y4" path="res://scripts/world.gd" id="1_pcupu"]
+[ext_resource type="PackedScene" uid="uid://dtcrra7m2ni53" path="res://scenes/box.tscn" id="1_tsbrl"]
+[ext_resource type="PackedScene" uid="uid://ce43i43edb0sb" path="res://scenes/player.tscn" id="2_nhxle"]
+[ext_resource type="PackedScene" uid="uid://bmen0kmajg5bp" path="res://scenes/zombie.tscn" id="3_2wjus"]
+[ext_resource type="AudioStream" uid="uid://d2g2jnp1snl1o" path="res://assets/audio/backgroundmusic.wav" id="3_qfnet"]
+[ext_resource type="Texture2D" uid="uid://63hci1jtc6dk" path="res://assets/textures/reticle.png" id="4_reticle"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_paused"]
+font_size = 120
+font_color = Color(0.50980395, 0.07058824, 0.07058824, 1)
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_zombies_killed"]
+font_size = 30
+font_color = Color(0.50980395, 0.07058824, 0.07058824, 1)
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_5dro7"]
+
+[node name="World" type="Node2D" unique_id=422322287]
+script = ExtResource("1_pcupu")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=123456789]
+
+[node name="HPPanel" type="Panel" parent="UI" unique_id=987654321]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -345.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 60.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="UIHealthBar" type="ProgressBar" parent="UI/HPPanel" unique_id=987654322]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+max_value = 10.0
+value = 10.0
+show_percentage = false
+
+[node name="Crosshair" type="TextureRect" parent="UI" unique_id=123456792]
+modulate = Color(0.62352943, 0.8666667, 0.31764707, 1)
+custom_minimum_size = Vector2(36, 36)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -18.0
+offset_bottom = 18.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_reticle")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CenterContainer" type="CenterContainer" parent="UI" unique_id=123456790]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseLabel" type="Label" parent="UI/CenterContainer" unique_id=123456791]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.50980395, 0.07058824, 0.07058824, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 120
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_paused")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ZombiesKilledLabel" type="Label" parent="UI" unique_id=246813579]
+offset_left = 10.0
+offset_right = 350.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.50980395, 0.07058824, 0.07058824, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 30
+text = "ZOMBIES KILLED: 0"
+label_settings = SubResource("LabelSettings_zombies_killed")
+vertical_alignment = 1
+uppercase = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=780535439]
+modulate = Color(0.0901, 0.17, 0.104748, 1)
+position = Vector2(603, 424)
+scale = Vector2(5063.25, 3391.75)
+mesh = SubResource("QuadMesh_5dro7")
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." unique_id=1966840085 instance=ExtResource("2_nhxle")]
+position = Vector2(634, 340)
+
+[node name="MainCamera" type="Camera2D" parent="." unique_id=1842752635]
+process_callback = 0
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=555367626]
+stream = ExtResource("3_qfnet")
+volume_db = -2.0
+autoplay = true
+
+[node name="Boxes" type="Node" parent="." unique_id=1777287446]
+
+[node name="Box" parent="Boxes" unique_id=1103685895 instance=ExtResource("1_tsbrl")]
+position = Vector2(195, 154)
+
+[node name="Box2" parent="Boxes" unique_id=1047610743 instance=ExtResource("1_tsbrl")]
+position = Vector2(905, 63)
+
+[node name="Box3" parent="Boxes" unique_id=1219294043 instance=ExtResource("1_tsbrl")]
+position = Vector2(988, 504)
+
+[node name="Box4" parent="Boxes" unique_id=419332194 instance=ExtResource("1_tsbrl")]
+position = Vector2(277, 685)
+
+[node name="Box5" parent="Boxes" unique_id=954243306 instance=ExtResource("1_tsbrl")]
+position = Vector2(420, -175)
+
+[node name="Zombies" type="Node" parent="." unique_id=2029882502]
+
+[node name="Zombie" parent="Zombies" unique_id=685900403 instance=ExtResource("3_2wjus")]
+position = Vector2(950, 293)
+
+[node name="Zombie2" parent="Zombies" unique_id=1962809325 instance=ExtResource("3_2wjus")]
+position = Vector2(589, -11)
+
+[node name="Zombie3" parent="Zombies" unique_id=1754954131 instance=ExtResource("3_2wjus")]
+position = Vector2(83, 350)
+
+[node name="Zombie4" parent="Zombies" unique_id=119243816 instance=ExtResource("3_2wjus")]
+position = Vector2(491, 731)
+
+[node name="Zombie5" parent="Zombies" unique_id=1115628734 instance=ExtResource("3_2wjus")]
+position = Vector2(950, 740)
+
+[node name="Zombie6" parent="Zombies" unique_id=147296320 instance=ExtResource("3_2wjus")]
+position = Vector2(1202, -89)
+
+[node name="Zombie7" parent="Zombies" unique_id=1317274064 instance=ExtResource("3_2wjus")]
+position = Vector2(64, -236)
+
+[node name="Zombie8" parent="Zombies" unique_id=1930099724 instance=ExtResource("3_2wjus")]
+position = Vector2(-185, 738)
